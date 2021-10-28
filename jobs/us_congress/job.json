@@ -1,0 +1,64 @@
+{
+  "job_id": 1610,
+  "settings": {
+    "name": "US_Congress_Investigation",
+    "email_notifications": {
+      "no_alert_for_skipped_runs": false
+    },
+    "timeout_seconds": 0,
+    "max_concurrent_runs": 1,
+    "tasks": [
+      {
+        "task_key": "Bootstrap",
+        "notebook_task": {
+          "notebook_path": "/Users/scott.stafford@databricks.com/Data Engineering/US_Congress/bootstrap",
+          "base_parameters": {
+            "database_name": "us_congress",
+            "project_home": "/dbfs/home/scott.stafford@databricks.com/us_congress"
+          }
+        },
+        "existing_cluster_id": "0712-135855-indue17",
+        "timeout_seconds": 0,
+        "email_notifications": {},
+        "description": ""
+      },
+      {
+        "task_key": "Bronze_Congress",
+        "depends_on": [
+          {
+            "task_key": "get_congress_members"
+          }
+        ],
+        "notebook_task": {
+          "notebook_path": "/Users/scott.stafford@databricks.com/Data Engineering/US_Congress/congress_bronze"
+        },
+        "existing_cluster_id": "0712-135855-indue17",
+        "timeout_seconds": 0,
+        "email_notifications": {}
+      },
+      {
+        "task_key": "get_congress_members",
+        "depends_on": [
+          {
+            "task_key": "Bootstrap"
+          }
+        ],
+        "notebook_task": {
+          "notebook_path": "/Users/scott.stafford@databricks.com/Data Engineering/US_Congress/GET list_congress_members",
+          "base_parameters": {
+            "congress_number": "117",
+            "domain_name": "api.propublica.org",
+            "api_key": ""
+          }
+        },
+        "existing_cluster_id": "0712-135855-indue17",
+        "timeout_seconds": 0,
+        "email_notifications": {}
+      }
+    ],
+    "format": "MULTI_TASK"
+  },
+  "created_time": 1635301938154,
+  "creator_user_name": "scott.stafford@databricks.com",
+  "run_as_user_name": "scott.stafford@databricks.com"
+}
